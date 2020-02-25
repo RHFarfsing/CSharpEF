@@ -23,6 +23,7 @@ namespace CSharpEF {
             //AddProduct(context);
             //GetAllProducts(context);
             //AddOrderline(context);
+            //RecalcOrderAmounts(context);
             GetOrderLines(context);
             
         }
@@ -142,7 +143,20 @@ namespace CSharpEF {
         }
         static void GetOrderLines(AppDbContext context) {
             var orderlines = context.Orderlines.ToList();
-            orderlines.ForEach(line => Console.WriteLine($"{line.Order.Id}/{line.Order.Description}/{line.Product.Code}/{line.Product.Name}/{line.Product.Price}/{line.Quantity}"));
+            orderlines.ForEach(line => Console.WriteLine($"{line.Order.Id}/{line.Order.Description}/{line.Product.Code}/{line.Product.Name}/{line.Product.Price}/{line.Quantity}/{line.Order.Amount}"));
+        }
+        static void RecalcOrderAmount(int orderId, AppDbContext context) {
+            var order = context.Orders.Find(orderId);
+            var total = order.Orderlines.Sum(ol => ol.Quantity * ol.Product.Price);
+            order.Amount = total;
+            var rc = context.SaveChanges();
+            if (rc != 1) throw new Exception("Order update of amount failed!");
+        }
+        static void RecalcOrderAmounts(AppDbContext context) {
+            var orderIds = context.Orders.Select(x => x.Id).ToArray();
+            foreach(var orderId in orderIds) {
+                RecalcOrderAmount(orderId, context);
+            }
         }
     }
 }
