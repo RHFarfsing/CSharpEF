@@ -12,8 +12,8 @@ namespace EFLibrary.Models {
         public double Amount { get; set; }
         public int CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual List<Orderline> Orderlines { get; set; }
         public override string ToString() => $"{Id}/{Description}/{Amount}/{CustomerId}";
-
         public Order() { }
     }
 }

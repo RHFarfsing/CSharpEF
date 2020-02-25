@@ -10,7 +10,7 @@ namespace CSharpEF {
             //var top2 = context.Products.Where(x => x.Id > 3).ToList();
             //Console.WriteLine($"Avg price is { context.Products.Average(x => x.Price)}");
             //var actCust = context.Customers.Where(x => x.Active); 
-            
+
             //AddCustomer(context);
             //GetCustomerByPk(context);
             //UpdateCustomer(context);
@@ -21,7 +21,9 @@ namespace CSharpEF {
             //Deleteorder(context);
             //GetAllOrders(context);
             //AddProduct(context);
-            GetAllProducts(context);
+            //GetAllProducts(context);
+            //AddOrderline(context);
+            GetOrderLines(context);
             
         }
         static void DeleteCustomer(AppDbContext context) {
@@ -123,6 +125,24 @@ namespace CSharpEF {
             var cust = context.Customers.Find(4);
             cust.Sales = OrderTotal;
             context.SaveChanges();
+        }
+        //below are orderline table stuff
+        static void AddOrderline(AppDbContext context) {
+            var order = context.Orders.SingleOrDefault(o => o.Description == "Order 5");
+            var product = context.Products.SingleOrDefault(p => p.Code == "prod2");
+            var orderline = new Orderline { 
+                Id = 0,
+                ProductId = product.Id,
+                OrderId = order.Id,
+                Quantity = 1
+            };
+            context.Orderlines.Add(orderline);
+            var rowsAffected = context.SaveChanges();
+            if (rowsAffected != 1) throw new Exception("Orderline insert failed!");
+        }
+        static void GetOrderLines(AppDbContext context) {
+            var orderlines = context.Orderlines.ToList();
+            orderlines.ForEach(line => Console.WriteLine($"{line.Order.Id}/{line.Order.Description}/{line.Product.Code}/{line.Product.Name}/{line.Product.Price}/{line.Quantity}"));
         }
     }
 }
