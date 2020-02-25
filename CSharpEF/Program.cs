@@ -145,6 +145,7 @@ namespace CSharpEF {
             var orderlines = context.Orderlines.ToList();
             orderlines.ForEach(line => Console.WriteLine($"{line.Order.Id}/{line.Order.Description}/{line.Product.Code}/{line.Product.Name}/{line.Product.Price}/{line.Quantity}/{line.Order.Amount}"));
         }
+        //This is what we will be recreating in our capstone project
         static void RecalcOrderAmount(int orderId, AppDbContext context) {
             var order = context.Orders.Find(orderId);
             var total = order.Orderlines.Sum(ol => ol.Quantity * ol.Product.Price);
