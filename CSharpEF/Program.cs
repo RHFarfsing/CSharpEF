@@ -24,7 +24,7 @@ namespace CSharpEF {
             //GetAllProducts(context);
             //AddOrderline(context);
             //RecalcOrderAmounts(context);
-            GetOrderLines(context);
+            //GetOrderLines(context);
             
         }
         static void DeleteCustomer(AppDbContext context) {
